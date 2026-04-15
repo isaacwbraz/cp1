@@ -1,5 +1,6 @@
 public class Restaurante {
-    
+     private static final double TAXA_ENTREGA = 8.0;
+
     private int codigo;
     private String nome;
     private String endereco;
@@ -74,6 +75,10 @@ public class Restaurante {
             throw new IllegalArgumentException("Categoria inválida!");
         }
         this.categoriaCulinaria = categoriaCulinaria;
+    }
+
+    public double getTaxaEntrega() {
+        return TAXA_ENTREGA;
     }
 
     @Override
