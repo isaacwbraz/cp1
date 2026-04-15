@@ -5,6 +5,7 @@ public class Pedido {
 
     private List<itemPedido> itens = new ArrayList<>();
     private Restaurante restaurante;
+    private Entregador entregador;
 
     public Pedido(Restaurante restaurante) {
         this.restaurante = restaurante;
@@ -28,5 +29,23 @@ public class Pedido {
         soma += restaurante.getTaxaEntrega();
 
         return soma;
+    }
+
+    public boolean atribuirEntregador(Entregador e) {
+        if(e.getStatus().equalsIgnoreCase("disponível")) {
+            this.entregador = e;
+            e.setStatus("em entrega");
+            return true;
+        } else {
+            System.out.println("Entregador não está disponível!");
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido do restaurante " + restaurante.getNome() +
+               " | Total: R$" + calcularTotal() +
+               (entregador != null ? " | Entregador: " + entregador.getNome() : " | Sem entregador");
     }
 }

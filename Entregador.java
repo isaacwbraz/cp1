@@ -8,7 +8,7 @@ public class Entregador {
     private String status;
 
     public Entregador(int codigo, String nome, String cpf, String telefone,
-        String veivulo, String status){
+        String veiculo, String status){
             this.codigo = codigo;
             setNome(nome);
             setCpf(cpf);
