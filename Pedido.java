@@ -32,7 +32,7 @@ public class Pedido {
     }
 
     public boolean atribuirEntregador(Entregador e) {
-        if(e.getStatus().equalsIgnoreCase("disponível")) {
+        if(e.getStatus().toLowerCase().contains("dispon")) {
             this.entregador = e;
             e.setStatus("em entrega");
             return true;

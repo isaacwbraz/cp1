@@ -166,7 +166,7 @@ public class SistemaMain {
     }
 
     // ===== PEDIDO =====
- private static void cadastrarPedido() {
+    private static void cadastrarPedido() {
     System.out.println("\n--- CADASTRAR PEDIDO ---");
 
     if (clientes.isEmpty() || produtos.isEmpty() || restaurantes.isEmpty() || entregadores.isEmpty()) {
@@ -187,7 +187,7 @@ public class SistemaMain {
 
     Entregador entregadorDisponivel = null;
     for (Entregador e : entregadores) {
-        if (e.getStatus().equalsIgnoreCase("disponível")) {
+        if (e.getStatus().toLowerCase().contains("dispon")) {
             entregadorDisponivel = e;
             break;
         }
