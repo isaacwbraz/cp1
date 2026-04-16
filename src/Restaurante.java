@@ -1,3 +1,4 @@
+package src;
 public class Restaurante {
      private static final double TAXA_ENTREGA = 8.0;
 

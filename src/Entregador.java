@@ -1,22 +1,23 @@
-public class Cliente {
+package src;
+public class Entregador {
     
     private int codigo;
     private String nome;
     private String cpf;
     private String telefone;
-    private String email;
-    private String endereco;
+    private String veiculo;
+    private String status;
 
-    public Cliente(int codigo, String nome,
-         String cpf, String telefone, String email, String endereco){
+    public Entregador(int codigo, String nome, String cpf, String telefone,
+        String veiculo, String status){
             this.codigo = codigo;
             setNome(nome);
             setCpf(cpf);
             setTelefone(telefone);
-            setEmail(email);
-            setEndereco(endereco);
-         }
-
+            setVeiculo(veiculo);
+            setStatus(status);
+        }
+    
     public int getCodigo(){
         return codigo;
     }
@@ -38,7 +39,7 @@ public class Cliente {
 
     public void setCpf(String cpf){
         if(cpf == null || cpf.length() != 11){
-            throw new IllegalArgumentException("CPF inválido!"); 
+            throw new IllegalArgumentException("CPF inválido!");
         }
         this.cpf = cpf;
     }
@@ -54,32 +55,30 @@ public class Cliente {
         this.telefone = telefone;
     }
 
-    public String getEmail(){
-        return email;
+    public String getVeiculo(){
+        return veiculo;
     }
 
-    public void setEmail(String email){
-        if(email == null || !email.contains("@")){
-            throw new IllegalArgumentException("Email inválido!");
+    public void setVeiculo(String veiculo){
+        if(veiculo == null || veiculo.isEmpty()){
+            throw new IllegalArgumentException("Veiculo inválido!");
         }
-        this.email = email;
+        this.veiculo = veiculo;
     }
 
-    public String getEndereco(){
-        return endereco;
+    public String getStatus(){
+        return status;
     }
 
-    public void setEndereco(String endereco){
-        if(endereco == null || endereco.isEmpty()){
-            throw new IllegalArgumentException("Endereço inválido!");
+    public void setStatus(String status){
+        if(status == null || status.isEmpty()){
+            throw new IllegalArgumentException("Status inválido!");
         }
-        this.endereco = endereco;
+        this.status = status;
     }
-
 
     @Override
     public String toString() {
-        return "Cliente: " + nome + " | CPF: " + cpf +
-         " | Telefone: " + telefone + " | Email: " + email;
+        return "Entregador: " + nome + " | Veículo: " + veiculo + " | Status: " + status;
     }
 }
