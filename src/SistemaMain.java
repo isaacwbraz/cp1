@@ -213,8 +213,7 @@ public class SistemaMain {
     int qtd = scanner.nextInt();
     scanner.nextLine();
 
-    itemPedido item = new itemPedido(1, produto, qtd, produto.getPreco());
-    pedido.adicionarItem(item);
+    pedido.adicionarItem(produto, qtd);
 
     if (ent != null) {
         if (pedido.atribuirEntregador(ent)) {

@@ -16,6 +16,11 @@ public class Pedido {
         itens.add(item);
     }
 
+    public void adicionarItem(Produto produto, int quantidade) {
+        itemPedido novoItem = new itemPedido(itens.size() + 1, produto, quantidade, produto.getPreco());
+        this.adicionarItem(novoItem); 
+    }
+
     public double calcularTotal() {
         double soma = 0;
         for(itemPedido item : itens) {
