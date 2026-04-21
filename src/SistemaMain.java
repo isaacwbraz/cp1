@@ -5,10 +5,8 @@ import java.util.ArrayList;
 public class SistemaMain {
     private static Scanner scanner = new Scanner(System.in);
 
-    private static ArrayList<Restaurante> restaurantes = new ArrayList<>();
+    private static ArrayList<Usuario> usuarios = new ArrayList<>();
     private static ArrayList<Produto> produtos = new ArrayList<>();
-    private static ArrayList<Cliente> clientes = new ArrayList<>();
-    private static ArrayList<Entregador> entregadores = new ArrayList<>();
     private static ArrayList<Pedido> pedidos = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -71,14 +69,18 @@ public class SistemaMain {
         String categoria = scanner.nextLine();
 
         Restaurante r = new Restaurante(codigo, nome, endereco, cnpj, telefone, categoria);
-        restaurantes.add(r);
+        usuarios.add(r);
         System.out.println("Restaurante cadastrado com sucesso!");
     }
 
     private static void listarRestaurantes() {
         System.out.println("\n--- LISTA DE RESTAURANTES ---");
-        if (restaurantes.isEmpty()) System.out.println("Nenhum restaurante cadastrado.");
-        else for (Restaurante r : restaurantes) System.out.println(r);
+        if (usuarios.isEmpty()) System.out.println("Nenhum restaurante cadastrado.");
+        else for (Usuario u : usuarios) {
+            if (u instanceof Restaurante) {
+                System.out.println(u);
+            }
+        }
     }
 
     // ===== PRODUTO =====
@@ -95,11 +97,17 @@ public class SistemaMain {
         System.out.print("Categoria: ");
         String categoria = scanner.nextLine();
 
-        if (restaurantes.isEmpty()) {
+        if (usuarios.isEmpty()) {
             System.out.println("Nenhum restaurante cadastrado. Cadastre um restaurante primeiro!");
             return;
         }
-        Restaurante restaurante = restaurantes.get(0);
+        Restaurante restaurante = null;
+        for (Usuario u : usuarios) {
+            if (u instanceof Restaurante) {
+                restaurante = (Restaurante) u;
+                break;
+            }
+        }
 
         Produto p = new Produto(codigo, nome, descricao, preco, categoria, restaurante);
         produtos.add(p);
@@ -129,14 +137,18 @@ public class SistemaMain {
         String endereco = scanner.nextLine();
 
         Cliente c = new Cliente(codigo, nome, cpf, telefone, email, endereco);
-        clientes.add(c);
+        usuarios.add(c);
         System.out.println("Cliente cadastrado com sucesso!");
     }
 
     private static void listarClientes() {
         System.out.println("\n--- LISTA DE CLIENTES ---");
-        if (clientes.isEmpty()) System.out.println("Nenhum cliente cadastrado.");
-        else for (Cliente c : clientes) System.out.println(c);
+        if (usuarios.isEmpty()) System.out.println("Nenhum cliente cadastrado.");
+        else for (Usuario u : usuarios) {
+            if (u instanceof Cliente) {
+                System.out.println(u);
+            }
+        }
     }
 
     // ===== ENTREGADOR =====
@@ -156,27 +168,45 @@ public class SistemaMain {
         String status = scanner.nextLine();
 
         Entregador e = new Entregador(codigo, nome, cpf, telefone, veiculo, status);
-        entregadores.add(e);
+        usuarios.add(e);
         System.out.println("Entregador cadastrado com sucesso!");
     }
 
     private static void listarEntregadores() {
         System.out.println("\n--- LISTA DE ENTREGADORES ---");
-        if (entregadores.isEmpty()) System.out.println("Nenhum entregador cadastrado.");
-        else for (Entregador e : entregadores) System.out.println(e);
+        if (usuarios.isEmpty()) System.out.println("Nenhum entregador cadastrado.");
+        else for (Usuario u : usuarios) {
+            if (u instanceof Entregador) {
+                System.out.println(u);
+            }
+        }
     }
 
     // ===== PEDIDO =====
-    private static void cadastrarPedido() {
+   private static void cadastrarPedido() {
     System.out.println("\n--- CADASTRAR PEDIDO ---");
 
-    if (clientes.isEmpty() || produtos.isEmpty() || restaurantes.isEmpty() || entregadores.isEmpty()) {
-        System.out.println("É necessário ter cliente, produto, restaurante e entregador cadastrados!");
+    Restaurante rest = null;
+    Cliente cli = null;
+    Entregador ent = null;
+
+    for (Usuario u : usuarios) {
+        if (u instanceof Restaurante && rest == null) rest = (Restaurante) u;
+        if (u instanceof Cliente && cli == null) cli = (Cliente) u;
+        if (u instanceof Entregador && ent == null) {
+            Entregador e = (Entregador) u;
+            if (e.getStatus().toLowerCase().contains("dispon")) {
+                ent = e;
+            }
+        }
+    }
+
+    if (rest == null || cli == null || produtos.isEmpty()) {
+        System.out.println("Erro: Verifique se há restaurantes, clientes e produtos cadastrados!");
         return;
     }
 
-    Restaurante restaurante = restaurantes.get(0);
-    Pedido pedido = new Pedido(restaurante);
+    Pedido pedido = new Pedido(rest);
 
     Produto produto = produtos.get(0);
     System.out.print("Quantidade do produto " + produto.getNome() + ": ");
@@ -186,17 +216,9 @@ public class SistemaMain {
     itemPedido item = new itemPedido(1, produto, qtd, produto.getPreco());
     pedido.adicionarItem(item);
 
-    Entregador entregadorDisponivel = null;
-    for (Entregador e : entregadores) {
-        if (e.getStatus().toLowerCase().contains("dispon")) {
-            entregadorDisponivel = e;
-            break;
-        }
-    }
-
-    if (entregadorDisponivel != null) {
-        if (pedido.atribuirEntregador(entregadorDisponivel)) {
-            System.out.println("Entregador " + entregadorDisponivel.getNome() + " atribuído ao pedido!");
+    if (ent != null) {
+        if (pedido.atribuirEntregador(ent)) {
+            System.out.println("Entregador " + ent.getNome() + " atribuído ao pedido!");
         }
     } else {
         System.out.println("Nenhum entregador disponível no momento!");
