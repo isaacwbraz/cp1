@@ -24,7 +24,6 @@ public class Cliente extends Usuario {
 
     @Override
     public String toString() {
-        return "Cliente: " + nome + " | CPF: " + cpf +
-         " | Telefone: " + telefone + " | Email: " + email;
+    return super.toString() + " | CPF: " + cpf + " | Email: " + email;
     }
 }

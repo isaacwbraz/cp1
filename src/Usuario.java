@@ -61,4 +61,8 @@ public class Usuario {
         }
         this.endereco = endereco;
     }
+
+    public String toString() {
+    return "Nome: " + nome; 
+    }
 }

@@ -35,6 +35,6 @@ public class Entregador extends Usuario {
 
     @Override
     public String toString() {
-        return "Entregador: " + nome + " | Veículo: " + veiculo + " | Status: " + status;
+        return super.toString() + " | Veículo: " + veiculo + " | Status: " + status;
     }
 }

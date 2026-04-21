@@ -41,7 +41,7 @@ public class Restaurante extends Usuario {
 
     @Override
     public String toString() {
-        return "Restaurante: " + nome + " | CNPJ: " + cnpj + 
+        return super.toString() + " | CNPJ: " + cnpj + 
         " | Telefone: " + telefone + " | Categoria: " + categoriaCulinaria;
     }
 }
