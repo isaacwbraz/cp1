@@ -1,7 +1,7 @@
 package src;
 public class Restaurante extends Usuario {
     private static final double TAXA_ENTREGA = 8.0;
-
+    private int id;
     private String cnpj;
     private String categoriaCulinaria;
 
@@ -20,6 +20,14 @@ public class Restaurante extends Usuario {
                " | CNPJ: " + cnpj + 
                " | Categoria: " + categoriaCulinaria + 
                " | Taxa de Entrega: R$" + TAXA_ENTREGA;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCnpj(){

@@ -4,12 +4,43 @@ import java.util.List;
 
 public class Pedido {
 
+    private int id; 
     private List<itemPedido> itens = new ArrayList<>();
     private Restaurante restaurante;
     private Entregador entregador;
+    private Cliente cliente;
 
-    public Pedido(Restaurante restaurante) {
+    public Pedido(Restaurante restaurante, Cliente cliente) {
         this.restaurante = restaurante;
+        this.cliente = cliente;
+    }
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<itemPedido> getItens() {
+        return itens;
+    }
+
+    public Restaurante getRestaurante() {
+        return restaurante;
+    }
+
+    public Entregador getEntregador() {
+        return entregador;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public double getValorTotal() {
+        return calcularTotal();
     }
 
     public void adicionarItem(itemPedido item) {
@@ -31,7 +62,6 @@ public class Pedido {
         else if(soma > 200) soma *= 0.90;
         else if(soma > 100) soma *= 0.95;
 
-
         soma += restaurante.getTaxaEntrega();
 
         return soma;
@@ -51,7 +81,7 @@ public class Pedido {
     @Override
     public String toString() {
         return "Pedido do restaurante " + restaurante.getNome() +
-               " | Total: R$" + calcularTotal() +
+               " | Total: R$" + String.format("%.2f", calcularTotal()) +
                (entregador != null ? " | Entregador: " + entregador.getNome() : " | Sem entregador");
     }
 }

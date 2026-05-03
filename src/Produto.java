@@ -1,6 +1,8 @@
 package src;
 public class Produto {
     
+    private int id;;
+
     private int codigo;
     private String nome;
     private String descricao;
@@ -18,6 +20,14 @@ public class Produto {
             this.restaurante = restaurante;
         }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public int getCodigo(){
         return codigo;
     }

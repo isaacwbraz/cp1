@@ -1,6 +1,8 @@
 package src;
 public abstract class Usuario {
     
+    protected int id;
+
     protected int codigo;
     protected String nome;
     protected String cpf;
@@ -12,6 +14,14 @@ public abstract class Usuario {
         setCpf(cpf);
         setTelefone(telefone);
         setEndereco(endereco);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public abstract String exibirDados();
@@ -47,7 +57,7 @@ public abstract class Usuario {
     }
 
     public void setTelefone(String telefone){
-        if(telefone == null || telefone.length() != 8){
+        if(telefone == null || telefone.length() != 10){
             throw new IllegalArgumentException("Telefone inválido!");
         }
         this.telefone = telefone;
