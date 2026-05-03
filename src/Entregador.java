@@ -11,6 +11,14 @@ public class Entregador extends Usuario {
             setStatus(status);
         }
 
+    @Override
+    public String exibirDados() {
+        return "TIPO: Entregador | ID: " + codigo + 
+               " | Nome: " + nome + 
+               " | Veículo: " + veiculo + 
+               " | Status Atual: " + status;
+    }
+    
     public String getVeiculo(){
         return veiculo;
     }
@@ -31,10 +39,5 @@ public class Entregador extends Usuario {
             throw new IllegalArgumentException("Status inválido!");
         }
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + " | Veículo: " + veiculo + " | Status: " + status;
     }
 }

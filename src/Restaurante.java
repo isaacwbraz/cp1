@@ -12,6 +12,15 @@ public class Restaurante extends Usuario {
             setCategoriaCulinaria(categoriaCulinaria);
         }
 
+    
+    @Override
+    public String exibirDados() {
+        return "TIPO: Restaurante | ID: " + codigo + 
+               " | Nome: " + nome + 
+               " | CNPJ: " + cnpj + 
+               " | Categoria: " + categoriaCulinaria + 
+               " | Taxa de Entrega: R$" + TAXA_ENTREGA;
+    }
 
     public String getCnpj(){
         return cnpj;
@@ -37,11 +46,5 @@ public class Restaurante extends Usuario {
 
     public double getTaxaEntrega() {
         return TAXA_ENTREGA;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + " | CNPJ: " + cnpj + 
-        " | Telefone: " + telefone + " | Categoria: " + categoriaCulinaria;
     }
 }

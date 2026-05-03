@@ -10,6 +10,15 @@ public class Cliente extends Usuario {
 
          }
 
+    @Override
+    public String exibirDados() {
+        return "TIPO: Cliente | ID: " + codigo + 
+               " | Nome: " + nome + 
+               " | CPF: " + cpf + 
+               " | Email: " + email + 
+               " | Endereço: " + endereco;
+    }
+
 
     public String getEmail(){
         return email;
@@ -24,6 +33,6 @@ public class Cliente extends Usuario {
 
     @Override
     public String toString() {
-    return super.toString() + " | CPF: " + cpf + " | Email: " + email;
+        return "Cliente: " + nome + " (" + email + ")";
     }
 }

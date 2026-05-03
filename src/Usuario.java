@@ -1,5 +1,5 @@
 package src;
-public class Usuario {
+public abstract class Usuario {
     
     protected int codigo;
     protected String nome;
@@ -13,6 +13,8 @@ public class Usuario {
         setTelefone(telefone);
         setEndereco(endereco);
     }
+
+    public abstract String exibirDados();
 
     public int getCodigo(){
         return codigo;

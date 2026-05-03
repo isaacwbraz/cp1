@@ -78,7 +78,7 @@ public class SistemaMain {
         if (usuarios.isEmpty()) System.out.println("Nenhum restaurante cadastrado.");
         else for (Usuario u : usuarios) {
             if (u instanceof Restaurante) {
-                System.out.println(u);
+                System.out.println(u.exibirDados());
             }
         }
     }
@@ -146,7 +146,7 @@ public class SistemaMain {
         if (usuarios.isEmpty()) System.out.println("Nenhum cliente cadastrado.");
         else for (Usuario u : usuarios) {
             if (u instanceof Cliente) {
-                System.out.println(u);
+                System.out.println(u.exibirDados());
             }
         }
     }
@@ -177,7 +177,7 @@ public class SistemaMain {
         if (usuarios.isEmpty()) System.out.println("Nenhum entregador cadastrado.");
         else for (Usuario u : usuarios) {
             if (u instanceof Entregador) {
-                System.out.println(u);
+                System.out.println(u.exibirDados());
             }
         }
     }
