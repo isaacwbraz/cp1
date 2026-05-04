@@ -1,8 +1,13 @@
 package src.dao;
 
+import src.Cliente;
+import src.Entregador;
 import src.Pedido;
+import src.Restaurante;
 import src.itemPedido;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PedidoDAO {
 
@@ -17,7 +22,7 @@ public class PedidoDAO {
             if (pedido.getEntregador() != null) {
                 stmt.setInt(3, pedido.getEntregador().getId());
             } else {
-                stmt.setNull(3, java.sql.Types.INTEGER);
+                stmt.setNull(3, java.sql.Types.INTEGER); 
             }
             stmt.setString(4, "Pendente");
             stmt.setDouble(5, pedido.getValorTotal());
@@ -62,4 +67,37 @@ public class PedidoDAO {
     }
     
   }
+
+    public List<Pedido> listarTodos() {
+    List<Pedido> pedidos = new ArrayList<>();
+    String sql = "SELECT * FROM pedido";
+
+    RestauranteDAO restauranteDAO = new RestauranteDAO();
+    ClienteDAO clienteDAO = new ClienteDAO();
+    EntregadorDAO entregadorDAO = new EntregadorDAO();
+
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            Restaurante rest = restauranteDAO.buscarPorId(rs.getInt("restaurante_id"));
+            Cliente cli = clienteDAO.buscarPorId(rs.getInt("cliente_id"));
+            Entregador ent = entregadorDAO.buscarPorId(rs.getInt("entregador_id"));
+
+            Pedido p = new Pedido(rest, cli); 
+            p.setId(rs.getInt("codigo"));
+        
+            int entregadorId = rs.getInt("entregador_id");
+            if (!rs.wasNull()) {
+                p.atribuirEntregador(ent);
+            }
+
+            pedidos.add(p);
+        }
+    } catch (SQLException e) {
+        System.err.println("Erro ao listar pedidos: " + e.getMessage());
+    }
+    return pedidos;
+    }
 }

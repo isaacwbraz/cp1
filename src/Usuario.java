@@ -46,10 +46,15 @@ public abstract class Usuario {
     }
 
     public void setCpf(String cpf){
-        if(cpf == null || cpf.length() != 11){
-            throw new IllegalArgumentException("CPF inválido!");
-        }
+
+        if (cpf == null || cpf.trim().isEmpty()) {
         this.cpf = cpf;
+        return;
+    }
+    if (cpf.length() != 11) { 
+        throw new IllegalArgumentException("CPF inválido!");
+    }
+    this.cpf = cpf;
     }
 
     public String getTelefone(){
@@ -57,7 +62,7 @@ public abstract class Usuario {
     }
 
     public void setTelefone(String telefone){
-        if(telefone == null || telefone.length() != 10){
+        if(telefone == null || telefone.length() != 11){
             throw new IllegalArgumentException("Telefone inválido!");
         }
         this.telefone = telefone;

@@ -37,7 +37,7 @@ public class RestauranteDAO {
         }
     }
 
-    public List<Restaurante> listarRestaurantes() {
+    public List<Restaurante> listarTodos() {
         List<Restaurante> restaurantes = new ArrayList<>();
         String sql = "SELECT * FROM restaurante";
 
@@ -63,4 +63,31 @@ public class RestauranteDAO {
         }
         return restaurantes;
     }
+
+    public Restaurante buscarPorId(int id) {
+    Restaurante r = null;
+    String sql = "SELECT * FROM restaurante WHERE codigo = ?";
+
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                // Instancia o objeto com os dados do banco
+                r = new Restaurante(
+                    rs.getInt("codigo"),
+                    rs.getString("nome"),
+                    rs.getString("endereco"),
+                    rs.getString("cnpj"),
+                    rs.getString("telefone"),
+                    rs.getString("cat_culinaria")
+                );
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("Erro ao buscar restaurante: " + e.getMessage());
+    }
+    return r;
+}
 }

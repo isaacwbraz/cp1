@@ -35,4 +35,29 @@ public class ProdutoDAO {
             return false;
         }
     }
+
+    public List<Produto> listarTodos() {
+    List<Produto> produtos = new ArrayList<>();
+    String sql = "SELECT * FROM produto";
+
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            Produto p = new Produto(
+                rs.getInt("codigo"),
+                rs.getString("nome"),
+                rs.getString("descricao"),
+                rs.getDouble("preco"),
+                rs.getString("categoria"),
+                null
+            );
+            produtos.add(p);
+        }
+    } catch (SQLException e) {
+        System.err.println("Erro ao listar produtos: " + e.getMessage());
+    }
+    return produtos;
+}
 }

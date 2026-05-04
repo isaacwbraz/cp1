@@ -11,6 +11,7 @@ public class Entregador extends Usuario {
             setStatus(status);
         }
 
+
     @Override
     public String exibirDados() {
         return "TIPO: Entregador | ID: " + codigo + 

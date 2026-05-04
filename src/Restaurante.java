@@ -7,7 +7,7 @@ public class Restaurante extends Usuario {
 
     public Restaurante(int codigo, String nome, String endereco, String cnpj,
         String telefone, String categoriaCulinaria){
-            super(codigo, nome, null, telefone, endereco); 
+            super(codigo, nome, "", telefone, endereco); 
             setCnpj(cnpj);
             setCategoriaCulinaria(categoriaCulinaria);
         }

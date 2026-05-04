@@ -37,4 +37,55 @@ public class ClienteDAO {
             return false;
         }
     }
+
+    public List<Cliente> listarTodos() {
+    List<Cliente> clientes = new ArrayList<>();
+    String sql = "SELECT * FROM cliente";
+
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            Cliente c = new Cliente(
+                rs.getInt("codigo"),
+                rs.getString("nome"),
+                rs.getString("cpf"),
+                rs.getString("telefone"),
+                rs.getString("email"),
+                rs.getString("endereco")
+            );
+            clientes.add(c);
+        }
+    } catch (SQLException e) {
+        System.err.println("Erro ao listar clientes: " + e.getMessage());
+    }
+    return clientes;
+    }
+
+    public Cliente buscarPorId(int id) {
+    Cliente c = null;
+    String sql = "SELECT * FROM cliente WHERE codigo = ?";
+
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                c = new Cliente(
+                    rs.getInt("codigo"),
+                    rs.getString("nome"),
+                    rs.getString("cpf"),
+                    rs.getString("telefone"),
+                    rs.getString("email"),
+                    rs.getString("endereco")
+                );
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("Erro ao buscar cliente: " + e.getMessage());
+    }
+    return c;
+}
 }
