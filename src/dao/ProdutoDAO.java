@@ -1,6 +1,8 @@
 package src.dao;
 
 import src.Produto;
+import src.Restaurante;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,19 +41,25 @@ public class ProdutoDAO {
     public List<Produto> listarTodos() {
     List<Produto> produtos = new ArrayList<>();
     String sql = "SELECT * FROM produto";
+    
+    RestauranteDAO restDAO = new RestauranteDAO();
 
     try (Connection conn = ConexaoBD.getConexao();
          PreparedStatement stmt = conn.prepareStatement(sql);
          ResultSet rs = stmt.executeQuery()) {
 
         while (rs.next()) {
+            int restauranteId = rs.getInt("restaurante_id");
+            
+            Restaurante rest = restDAO.buscarPorId(restauranteId);
+
             Produto p = new Produto(
                 rs.getInt("codigo"),
                 rs.getString("nome"),
                 rs.getString("descricao"),
                 rs.getDouble("preco"),
                 rs.getString("categoria"),
-                null
+                rest // Agora 'rest' não é mais null!
             );
             produtos.add(p);
         }
@@ -60,4 +68,27 @@ public class ProdutoDAO {
     }
     return produtos;
 }
+
+   public boolean salvar(Produto p) {
+        String sql = "INSERT INTO produto (codigo, nome, descricao, preco, categoria, restaurante_id) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = ConexaoBD.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, p.getCodigo());
+            stmt.setString(2, p.getNome());
+            stmt.setString(3, p.getDescricao());
+            stmt.setDouble(4, p.getPreco());
+            stmt.setString(5, p.getCategoria());
+            
+            stmt.setInt(6, p.getRestaurante().getId());
+
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao salvar produto: " + e.getMessage());
+            return false;
+        }
+    }
 }

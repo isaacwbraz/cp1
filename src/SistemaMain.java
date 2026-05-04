@@ -101,38 +101,42 @@ public class SistemaMain {
 
     // ===== PRODUTO =====
     private static void cadastrarProduto() {
-        System.out.println("\n--- CADASTRAR PRODUTO ---");
-        System.out.print("Código: ");
-        int codigo = scanner.nextInt(); scanner.nextLine();
-        System.out.print("Nome: ");
-        String nome = scanner.nextLine();
-        System.out.print("Descrição: ");
-        String descricao = scanner.nextLine();
-        System.out.print("Preço: ");
-        double preco = scanner.nextDouble(); scanner.nextLine();
-        System.out.print("Categoria: ");
-        String categoria = scanner.nextLine();
+    System.out.println("\n--- CADASTRAR PRODUTO ---");
+    
+    RestauranteDAO restauranteDAO = new RestauranteDAO();
+    List<Restaurante> restaurantesNoBanco = restauranteDAO.listarTodos();
 
-        if (usuarios.isEmpty()) {
-            System.out.println("Nenhum restaurante cadastrado. Cadastre um restaurante primeiro!");
-            return;
-        }
-        Restaurante restaurante = null;
-        for (Usuario u : usuarios) {
-            if (u instanceof Restaurante) {
-                restaurante = (Restaurante) u;
-                break;
-            }
-        }
+    if (restaurantesNoBanco.isEmpty()) {
+        System.out.println("Nenhum restaurante encontrado no banco. Cadastre um restaurante primeiro!");
+        return;
+    }
 
-        Produto p = new Produto(codigo, nome, descricao, preco, categoria, restaurante);
-        if (produtoDAO.inserir(p, restaurante.getId())) { 
-    System.out.println("Produto vinculado ao restaurante " + restaurante.getNome() + " e salvo no banco!");
+    System.out.print("Código: ");
+    int codigo = scanner.nextInt(); scanner.nextLine();
+    System.out.print("Nome: ");
+    String nome = scanner.nextLine();
+    System.out.print("Descrição: ");
+    String descricao = scanner.nextLine();
+    System.out.print("Preço: ");
+    double preco = scanner.nextDouble(); scanner.nextLine();
+    System.out.print("Categoria: ");
+    String categoria = scanner.nextLine();
+
+    System.out.println("Selecione o restaurante (pelo índice):");
+    for (int i = 0; i < restaurantesNoBanco.size(); i++) {
+        System.out.println(i + " - " + restaurantesNoBanco.get(i).getNome());
+    }
+    int escolha = scanner.nextInt(); scanner.nextLine();
+    Restaurante restaurante = restaurantesNoBanco.get(escolha);
+
+    Produto p = new Produto(codigo, nome, descricao, preco, categoria, restaurante);
+    
+    if (produtoDAO.salvar(p)) { 
+    System.out.println("Produto '" + p.getNome() + "' cadastrado com sucesso no banco!");
     } else {
-        System.out.println("Erro ao salvar produto.");
+        System.out.println("Falha ao salvar produto no PostgreSQL.");
     }
-        System.out.println("Produto cadastrado com sucesso!");
-    }
+}
 
     private static void listarProdutos() {
         System.out.println("\n--- LISTA DE PRODUTOS (NO BANCO) ---");
@@ -199,14 +203,17 @@ public class SistemaMain {
     String cpf = scanner.nextLine();
     System.out.print("Veículo: ");
     String veiculo = scanner.nextLine();
-    System.out.print("Status: ");
+    System.out.print("Status (Disponível/Ocupado): ");
     String status = scanner.nextLine();
   
     Entregador e = new Entregador(codigo, nome, cpf, telefone, veiculo, status);
-
     EntregadorDAO entregadorDAO = new EntregadorDAO();
-    entregadorDAO.salvar(e); 
+    
+    if (entregadorDAO.salvar(e)) {
     System.out.println("Entregador cadastrado e salvo no banco de dados com sucesso!");
+    } else {
+        System.out.println("ERRO: O entregador NÃO foi salvo. Verifique se o status está correto conforme as regras do banco.");
+    }
 }
 
     private static void listarEntregadores() {
@@ -226,29 +233,35 @@ public class SistemaMain {
    private static void cadastrarPedido() {
     System.out.println("\n--- CADASTRAR PEDIDO ---");
 
-    Restaurante rest = null;
-    Cliente cli = null;
-    Entregador ent = null;
+    RestauranteDAO restDAO = new RestauranteDAO();
+    ClienteDAO cliDAO = new ClienteDAO();
+    EntregadorDAO entDAO = new EntregadorDAO();
+    ProdutoDAO prodDAO = new ProdutoDAO();
 
-    for (Usuario u : usuarios) {
-        if (u instanceof Restaurante && rest == null) rest = (Restaurante) u;
-        if (u instanceof Cliente && cli == null) cli = (Cliente) u;
-        if (u instanceof Entregador && ent == null) {
-            Entregador e = (Entregador) u;
-            if (e.getStatus().toLowerCase().contains("dispon")) {
-                ent = e;
-            }
-        }
+    List<Restaurante> restaurantes = restDAO.listarTodos();
+    List<Cliente> clientes = cliDAO.listarTodos();
+    List<Produto> produtosBanco = prodDAO.listarTodos();
+    List<Entregador> entregadores = entDAO.listarTodos();
+
+    if (restaurantes.isEmpty() || clientes.isEmpty() || produtosBanco.isEmpty()) {
+        System.out.println("Erro: Verifique se há restaurantes, clientes e produtos no BANCO DE DADOS!");
+        return;
     }
 
-    if (rest == null || cli == null || produtos.isEmpty()) {
-        System.out.println("Erro: Verifique se há restaurantes, clientes e produtos cadastrados!");
-        return;
+    Restaurante rest = restaurantes.get(0);
+    Cliente cli = clientes.get(0);
+    
+    Entregador ent = null;
+    for (Entregador e : entregadores) {
+        if (e.getStatus().toLowerCase().contains("dispon")) {
+            ent = e;
+            break;
+        }
     }
 
     Pedido pedido = new Pedido(rest, cli);
 
-    Produto produto = produtos.get(0);
+    Produto produto = produtosBanco.get(0);
     System.out.print("Quantidade do produto " + produto.getNome() + ": ");
     int qtd = scanner.nextInt();
     scanner.nextLine();
@@ -256,23 +269,16 @@ public class SistemaMain {
     pedido.adicionarItem(produto, qtd);
 
     if (ent != null) {
-        if (pedido.atribuirEntregador(ent)) {
-            System.out.println("Entregador " + ent.getNome() + " atribuído ao pedido!");
-        }
-    } else {
-        System.out.println("Nenhum entregador disponível no momento!");
+        pedido.atribuirEntregador(ent);
     }
 
     if (pedidoDAO.inserir(pedido)) {
-    System.out.println("Pedido salvo com sucesso no banco! ID: " + pedido.getId());
-    } else {
-        System.out.println("Erro ao persistir pedido.");
+        System.out.println("Pedido salvo com sucesso no banco!");
     }
-    System.out.println("Pedido cadastrado com sucesso!");
 }
 
 private static void listarPedidos() {
-    System.out.println("\n--- LISTA DE PEDIDOS (BANCO DE DATOS) ---");
+    System.out.println("\n--- LISTA DE PEDIDOS (BANCO DE DADOS) ---");
     
     PedidoDAO pedidoDAO = new PedidoDAO();
     List<Pedido> listaDoBanco = pedidoDAO.listarTodos();

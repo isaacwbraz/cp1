@@ -6,7 +6,7 @@ public class Entregador extends Usuario {
 
     public Entregador(int codigo, String nome, String cpf, String telefone,
         String veiculo, String status){
-            super(codigo, nome, cpf, telefone, null);
+            super(codigo, nome, cpf, telefone, "");
             setVeiculo(veiculo);
             setStatus(status);
         }

@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Pedido {
 
+    private int codigo; 
+    private String status;
     private int id; 
     private List<itemPedido> itens = new ArrayList<>();
     private Restaurante restaurante;
@@ -13,6 +15,24 @@ public class Pedido {
     public Pedido(Restaurante restaurante, Cliente cliente) {
         this.restaurante = restaurante;
         this.cliente = cliente;
+        this.status = "Pendende";
+        this.itens = new ArrayList<>();
+    }
+
+    public int getCodigo() {
+    return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
     public int getId() {
@@ -35,12 +55,12 @@ public class Pedido {
         return entregador;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public void setItens(List<itemPedido> itens) {
+    this.itens = itens;
     }
 
-    public double getValorTotal() {
-        return calcularTotal();
+    public Cliente getCliente() {
+        return cliente;
     }
 
     public void adicionarItem(itemPedido item) {
@@ -53,19 +73,17 @@ public class Pedido {
     }
 
     public double calcularTotal() {
-        double soma = 0;
-        for(itemPedido item : itens) {
-            soma += item.getSubtotal();
-        }
-
-        if(soma > 300) soma *= 0.85;
-        else if(soma > 200) soma *= 0.90;
-        else if(soma > 100) soma *= 0.95;
-
-        soma += restaurante.getTaxaEntrega();
-
-        return soma;
+    double soma = 0;
+    for(itemPedido item : itens) {
+        soma += item.getSubtotal();
     }
+
+    if(soma > 300) soma *= 0.85;
+    else if(soma > 200) soma *= 0.90;
+    else if(soma > 100) soma *= 0.95;
+
+    return soma + restaurante.getTaxaEntrega();
+}
 
     public boolean atribuirEntregador(Entregador e) {
         if(e.getStatus().toLowerCase().contains("dispon")) {

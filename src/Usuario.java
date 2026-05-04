@@ -73,11 +73,12 @@ public abstract class Usuario {
     }
 
     public void setEndereco(String endereco){
-        if(endereco == null || endereco.isEmpty()){
-            throw new IllegalArgumentException("Endereço inválido!");
-        }
+        if (endereco == null || endereco.trim().isEmpty()) {
         this.endereco = endereco;
+        return;
     }
+    this.endereco = endereco;
+}
 
     public String toString() {
     return "Nome: " + nome; 

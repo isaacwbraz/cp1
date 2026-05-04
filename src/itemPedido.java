@@ -13,8 +13,15 @@ public class itemPedido {
         setPrecoUnitario(precoUnitario);
     }
 
+    public itemPedido() {
+    }   
+
     public int getCodigo(){
         return codigo;
+    }
+
+    public void setCodigo(int codigo){
+        this.codigo = codigo;
     }
 
     public Produto getProduto(){

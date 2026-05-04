@@ -11,7 +11,7 @@ import src.dao.ConexaoBD;
 
 public class EntregadorDAO {
 
-    public void salvar(Entregador e) {
+    public boolean salvar(Entregador e) {
         String sql = "INSERT INTO entregador (codigo, nome, cpf, telefone, veiculo, status) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = ConexaoBD.getConexao();
@@ -26,9 +26,11 @@ public class EntregadorDAO {
             
             stmt.executeUpdate();
             System.out.println("Entregador salvo com sucesso!");
+            return true;
             
         } catch (SQLException ex) {
             System.err.println("Erro ao salvar entregador: " + ex.getMessage());
+            return false;
         }
     }
 
