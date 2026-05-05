@@ -24,7 +24,6 @@ public class RestauranteDAO {
             if (linhasAfetadas > 0) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
-                        // Atribui o código gerado pelo PostgreSQL ao objeto Java
                         restaurante.setId(rs.getInt(1));
                     }
                 }
@@ -74,7 +73,6 @@ public class RestauranteDAO {
         stmt.setInt(1, id);
         try (ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
-                // Instancia o objeto com os dados do banco
                 r = new Restaurante(
                     rs.getInt("codigo"),
                     rs.getString("nome"),
@@ -92,17 +90,22 @@ public class RestauranteDAO {
   }
 
     public boolean atualizar(Restaurante restaurante) {
-    String sql = "UPDATE restaurante SET nome = ?, endereco = ?, taxa_entrega = ? WHERE codigo = ?";
-    try (Connection conn = ConexaoBD.getConexao();
+    String sql = "UPDATE restaurante SET nome=?, endereco=?, cnpj=?, telefone=?, cat_culinaria=? WHERE codigo=?";
+
+   try (Connection conn = ConexaoBD.getConexao();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setString(1, restaurante.getNome());
-        stmt.setString(2, restaurante.getEndereco());
-        stmt.setDouble(3, restaurante.getTaxaEntrega());
-        stmt.setInt(4, restaurante.getCodigo());
-        return stmt.executeUpdate() > 0;
+    stmt.setString(1, restaurante.getNome());
+    stmt.setString(2, restaurante.getEndereco());
+    stmt.setString(3, restaurante.getCnpj());
+    stmt.setString(4, restaurante.getTelefone());
+    stmt.setString(5, restaurante.getCategoriaCulinaria());
+    stmt.setInt(6, restaurante.getCodigo());
+
+    stmt.executeUpdate();
+    return true;
     } catch (SQLException e) {
-        System.err.println("Erro ao atualizar restaurante: " + e.getMessage());
-        return false;
+    System.err.println("Erro ao atualizar restaurante: " + e.getMessage());
+    return false;
     }
   }
 

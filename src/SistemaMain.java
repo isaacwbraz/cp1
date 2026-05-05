@@ -7,7 +7,6 @@ import src.dao.PedidoDAO;
 import src.dao.ProdutoDAO;
 import src.dao.RestauranteDAO;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +17,7 @@ public class SistemaMain {
     private static RestauranteDAO restauranteDAO = new RestauranteDAO();
     private static ProdutoDAO produtoDAO = new ProdutoDAO();
     private static PedidoDAO pedidoDAO = new PedidoDAO();
+    private static EntregadorDAO entregadorDAO = new EntregadorDAO();
 
     private static ArrayList<Usuario> usuarios = new ArrayList<>();
     private static ArrayList<Produto> produtos = new ArrayList<>();
@@ -32,18 +32,38 @@ public class SistemaMain {
             scanner.nextLine();
 
             switch (opcao) {
+            // Restaurante
                 case 1: cadastrarRestaurante(); break;
                 case 2: listarRestaurantes(); break;
+                case 15: atualizarRestaurante(); break;
+                case 16: excluirRestaurante(); break;
+
+                // Produto
                 case 3: cadastrarProduto(); break;
                 case 4: listarProdutos(); break;
+                case 17: atualizarProduto(); break;
+                case 18: excluirProduto(); break;
+
+                // Cliente
                 case 5: cadastrarCliente(); break;
                 case 6: listarClientes(); break;
+                case 11: atualizarCliente(); break;
+                case 12: excluirCliente(); break;
+
+                // Entregador
                 case 7: cadastrarEntregador(); break;
                 case 8: listarEntregadores(); break;
+                case 13: atualizarEntregador(); break;
+                case 14: excluirEntregador(); break;
+
+                // Pedido
                 case 9: cadastrarPedido(); break;
                 case 10: listarPedidos(); break;
+                case 19: atualizarStatusPedido(); break;
+                case 20: excluirPedido(); break;
+
                 case 0: System.out.println("Encerrando sistema..."); break;
-                default: System.out.println("Opção inválida!");
+                default: System.out.println("Opção inválida!"); break;
             }
         } while (opcao != 0);
 
@@ -51,19 +71,28 @@ public class SistemaMain {
     }
 
     private static void exibirMenu() {
-        System.out.println("\n=== SISTEMA DE DELIVERY ===");
-        System.out.println("1. Cadastrar Restaurante");
-        System.out.println("2. Listar Restaurantes");
-        System.out.println("3. Cadastrar Produto");
-        System.out.println("4. Listar Produtos");
-        System.out.println("5. Cadastrar Cliente");
-        System.out.println("6. Listar Clientes");
-        System.out.println("7. Cadastrar Entregador");
-        System.out.println("8. Listar Entregadores");
-        System.out.println("9. Cadastrar Pedido");
-        System.out.println("10. Listar Pedidos");
-        System.out.println("0. Sair");
-        System.out.print("Escolha uma opção: ");
+    System.out.println("\n===============================================");
+    System.out.println("          SISTEMA DE DELIVERY COMIDEX          ");
+    System.out.println("===============================================");
+    System.out.println(" [RESTAURANTES]          [PRODUTOS]");
+    System.out.println(" 1. Cadastrar            3. Cadastrar");
+    System.out.println(" 2. Listar               4. Listar");
+    System.out.println(" 15. Atualizar           17. Atualizar");
+    System.out.println(" 16. Excluir             18. Excluir");
+    System.out.println("-----------------------------------------------");
+    System.out.println(" [CLIENTES]              [ENTREGADORES]");
+    System.out.println(" 5. Cadastrar            7. Cadastrar");
+    System.out.println(" 6. Listar               8. Listar");
+    System.out.println(" 11. Atualizar           13. Atualizar");
+    System.out.println(" 12. Excluir             14. Excluir");
+    System.out.println("-----------------------------------------------");
+    System.out.println(" [PEDIDOS]");
+    System.out.println(" 9. Fazer Pedido         10. Listar Pedidos");
+    System.out.println(" 19. Mudar Status        20. Cancelar/Excluir");
+    System.out.println("-----------------------------------------------");
+    System.out.println(" 0. Sair");
+    System.out.println("===============================================");
+    System.out.print("Escolha uma opção: ");
     }
 
     // ===== RESTAURANTE =====
@@ -98,6 +127,49 @@ public class SistemaMain {
             }
         }
     }
+
+    private static void atualizarRestaurante() {
+    System.out.println("\n--- ATUALIZAR RESTAURANTE ---");
+    System.out.print("Digite o código do restaurante que deseja editar: ");
+    int codigo = scanner.nextInt(); 
+    scanner.nextLine();
+
+    System.out.print("Novo Nome: ");
+    String nome = scanner.nextLine();
+    System.out.print("Novo Endereço: ");
+    String endereco = scanner.nextLine();
+    System.out.print("Novo CNPJ: ");
+    String cnpj = scanner.nextLine();
+    System.out.print("Novo Telefone: ");
+    String telefone = scanner.nextLine();
+    System.out.print("Nova Categoria Culinária: ");
+    String categoria = scanner.nextLine();
+
+    Restaurante r = new Restaurante(codigo, nome, endereco, cnpj, telefone, categoria);
+
+    if (restauranteDAO.atualizar(r)) {
+        System.out.println("✅ Restaurante atualizado no banco com sucesso!");
+    } else {
+        System.out.println("❌ Erro ao atualizar. Verifique se o código existe.");
+    }
+}
+
+    private static void excluirRestaurante() {
+    System.out.print("\nDigite o código do restaurante para excluir: ");
+    int codigo = scanner.nextInt(); 
+    scanner.nextLine();
+
+    System.out.print("⚠ ATENÇÃO: Isso pode falhar se houver produtos vinculados. Confirma? (S/N): ");
+    String confirma = scanner.nextLine();
+
+    if (confirma.equalsIgnoreCase("S")) {
+        if (restauranteDAO.excluir(codigo)) {
+            System.out.println("✅ Restaurante removido com sucesso!");
+        } else {
+            System.out.println("❌ Erro ao excluir. Motivo: Integridade referencial (Ex: existem produtos neste restaurante).");
+        }
+    }
+  }
 
     // ===== PRODUTO =====
     private static void cadastrarProduto() {
@@ -150,6 +222,54 @@ public class SistemaMain {
         }
     }
 
+    private static void atualizarProduto() {
+    System.out.println("\n--- ATUALIZAR PRODUTO ---");
+    System.out.print("Digite o código do produto que deseja editar: ");
+    int codigo = scanner.nextInt(); 
+    scanner.nextLine();
+
+    System.out.print("Novo Nome: ");
+    String nome = scanner.nextLine();
+    System.out.print("Nova Descrição: ");
+    String descricao = scanner.nextLine();
+    System.out.print("Novo Preço: ");
+    double preco = scanner.nextDouble(); 
+    scanner.nextLine();
+    System.out.print("Nova Categoria: ");
+    String categoria = scanner.nextLine();
+
+    List<Restaurante> restaurantes = restauranteDAO.listarTodos();
+    System.out.println("Selecione o restaurante dono deste produto:");
+    for (int i = 0; i < restaurantes.size(); i++) {
+        System.out.println(i + " - " + restaurantes.get(i).getNome());
+    }
+    int escolha = scanner.nextInt(); scanner.nextLine();
+    Restaurante rest = restaurantes.get(escolha);
+
+    Produto p = new Produto(codigo, nome, descricao, preco, categoria, rest);
+
+    if (produtoDAO.atualizar(p)) {
+        System.out.println("✅ Produto atualizado com sucesso!");
+    } else {
+        System.out.println("❌ Erro ao atualizar produto.");
+    }
+  }
+
+    private static void excluirProduto() {
+    System.out.print("\nDigite o código do produto para excluir: ");
+    int codigo = scanner.nextInt(); 
+    scanner.nextLine(); 
+
+    System.out.print("⚠ Tem certeza que deseja remover este produto? (S/N): ");
+    if (scanner.nextLine().equalsIgnoreCase("S")) {
+        if (produtoDAO.excluir(codigo)) {
+            System.out.println("✅ Produto removido do banco!");
+        } else {
+            System.out.println("❌ Erro ao excluir. Ele pode estar em um pedido ativo.");
+        }
+     }
+    }
+
     // ===== CLIENTE =====
     private static void cadastrarCliente() {
         System.out.println("\n--- CADASTRAR CLIENTE ---");
@@ -185,7 +305,44 @@ public class SistemaMain {
                 System.out.println(c.exibirDados());
             }
         }
+    }
+
+    private static void atualizarCliente() {
+    System.out.println("\n--- ATUALIZAR CLIENTE ---");
+    System.out.print("Código do cliente que deseja editar: ");
+    int codigo = scanner.nextInt(); 
+    scanner.nextLine(); 
+
+    System.out.print("Novo Nome: ");
+    String nome = scanner.nextLine();
+    System.out.print("Novo CPF: ");
+    String cpf = scanner.nextLine();
+    System.out.print("Novo Telefone: ");
+    String telefone = scanner.nextLine();
+    System.out.print("Novo Email: ");
+    String email = scanner.nextLine();
+    System.out.print("Novo Endereço: ");
+    String endereco = scanner.nextLine();
+
+    Cliente c = new Cliente(codigo, nome, cpf, telefone, email, endereco);
+
+    if (clienteDAO.atualizar(c)) {
+        System.out.println("✅ Cliente atualizado no banco com sucesso!");
+    } else {
+        System.out.println("❌ Erro ao atualizar cliente. Verifique o código.");
+    }
+}
+
+    private static void excluirCliente() {
+        System.out.print("\nCódigo do cliente para excluir: ");
+        int codigo = scanner.nextInt(); scanner.nextLine();
+        
+        System.out.print("⚠ Confirmar exclusão? (S/N): ");
+        if (scanner.nextLine().equalsIgnoreCase("S")) {
+            clienteDAO.excluir(codigo);
+            System.out.println("✅ Operação realizada.");
         }
+    }
     
 
     // ===== ENTREGADOR =====
@@ -228,6 +385,49 @@ public class SistemaMain {
             }
         }
     }
+
+    private static void atualizarEntregador() {
+    System.out.println("\n--- ATUALIZAR ENTREGADOR ---");
+    System.out.print("Digite o código do entregador que deseja editar: ");
+    int codigo = scanner.nextInt(); scanner.nextLine();
+
+
+    System.out.print("Novo Nome: ");
+    String nome = scanner.nextLine();
+    System.out.print("Novo Telefone: ");
+    String telefone = scanner.nextLine();
+    System.out.print("Novo CPF: ");
+    String cpf = scanner.nextLine();
+    System.out.print("Novo Veículo: ");
+    String veiculo = scanner.nextLine();
+    System.out.print("Novo Status (Disponível/Ocupado): ");
+    String status = scanner.nextLine();
+
+    Entregador e = new Entregador(codigo, nome, cpf, telefone, veiculo, status);
+
+    if (entregadorDAO.atualizar(e)) {
+        System.out.println("✅ Entregador atualizado no banco!");
+    } else {
+        System.out.println("❌ Erro ao atualizar entregador.");
+    }
+}
+
+private static void excluirEntregador() {
+    System.out.print("\nCódigo do entregador para excluir: ");
+    int codigo = scanner.nextInt(); 
+    scanner.nextLine();
+
+    System.out.print("⚠ Tem certeza? (S/N): ");
+    String confirma = scanner.nextLine();
+
+    if (confirma.equalsIgnoreCase("S")) {
+        if (entregadorDAO.excluir(codigo)) {
+            System.out.println("✅ Entregador removido com sucesso!");
+        } else {
+            System.out.println("❌ Erro: Verifique se ele está vinculado a um pedido.");
+        }
+    }
+}
 
     // ===== PEDIDO =====
    private static void cadastrarPedido() {
@@ -290,5 +490,26 @@ private static void listarPedidos() {
             System.out.println(p);
         }
     }
-}
+ }
+
+ private static void atualizarStatusPedido() {
+        System.out.print("Código do Pedido: ");
+        int cod = scanner.nextInt(); scanner.nextLine();
+        System.out.print("Novo Status (Caminho/Entregue): ");
+        String status = scanner.nextLine();
+        
+        if (pedidoDAO.atualizarStatus(cod, status)) {
+            System.out.println("✅ Status atualizado!");
+        }
+    }
+
+    private static void excluirPedido() {
+        System.out.print("Código do Pedido para DELETAR: ");
+        int cod = scanner.nextInt(); scanner.nextLine();
+        System.out.print("⚠ Isso apagará os itens do pedido. Confirma? (S/N): ");
+        if (scanner.nextLine().equalsIgnoreCase("S")) {
+            pedidoDAO.excluir(cod);
+            System.out.println("✅ Pedido excluído.");
+        }
+    }
 }
