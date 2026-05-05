@@ -89,5 +89,32 @@ public class RestauranteDAO {
         System.err.println("Erro ao buscar restaurante: " + e.getMessage());
     }
     return r;
-}
+  }
+
+    public boolean atualizar(Restaurante restaurante) {
+    String sql = "UPDATE restaurante SET nome = ?, endereco = ?, taxa_entrega = ? WHERE codigo = ?";
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, restaurante.getNome());
+        stmt.setString(2, restaurante.getEndereco());
+        stmt.setDouble(3, restaurante.getTaxaEntrega());
+        stmt.setInt(4, restaurante.getCodigo());
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao atualizar restaurante: " + e.getMessage());
+        return false;
+    }
+  }
+
+    public boolean excluir(int codigo) {
+    String sql = "DELETE FROM restaurante WHERE codigo = ?";
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, codigo);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao excluir restaurante: " + e.getMessage());
+        return false;
+    }
+  }
 }

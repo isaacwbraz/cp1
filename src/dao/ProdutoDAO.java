@@ -91,4 +91,31 @@ public class ProdutoDAO {
             return false;
         }
     }
+
+    public boolean atualizar(Produto produto) {
+    String sql = "UPDATE produto SET nome = ?, preco = ?, descricao = ? WHERE codigo = ?";
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, produto.getNome());
+        stmt.setDouble(2, produto.getPreco());
+        stmt.setString(3, produto.getDescricao());
+        stmt.setInt(4, produto.getCodigo());
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao atualizar produto: " + e.getMessage());
+        return false;
+    }
+}
+
+public boolean excluir(int codigo) {
+    String sql = "DELETE FROM produto WHERE codigo = ?";
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, codigo);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao excluir produto: " + e.getMessage());
+        return false;
+    }
+  }
 }

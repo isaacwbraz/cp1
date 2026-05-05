@@ -87,5 +87,32 @@ public class ClienteDAO {
         System.err.println("Erro ao buscar cliente: " + e.getMessage());
     }
     return c;
-}
+  }
+
+  public boolean atualizar(Cliente cliente) {
+    String sql = "UPDATE cliente SET nome = ?, email = ?, cpf = ? WHERE codigo = ?";
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, cliente.getNome());
+        stmt.setString(2, cliente.getEmail());
+        stmt.setString(3, cliente.getCpf());
+        stmt.setInt(4, cliente.getCodigo());
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao atualizar cliente: " + e.getMessage());
+        return false;
+    }
+  }
+
+  public boolean excluir(int codigo) {
+    String sql = "DELETE FROM cliente WHERE codigo = ?";
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, codigo);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao excluir cliente: " + e.getMessage());
+        return false;
+    }
+ }
 }

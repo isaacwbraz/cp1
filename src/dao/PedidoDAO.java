@@ -15,7 +15,7 @@ public class PedidoDAO {
         String sql = "INSERT INTO pedido ( status, data_pedido, cliente_id, restaurante_id, entregador_id) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexaoBD.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, pedido.getStatus());
             stmt.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
@@ -123,5 +123,47 @@ public class PedidoDAO {
             System.err.println("Erro ao carregar itens do pedido " + pedidoId + ": " + e.getMessage());
         }
         return itens;
+    }
+
+    public boolean atualizarStatus(int codigo, String novoStatus) {
+        String sql = "UPDATE pedido SET status = ? WHERE codigo = ?";
+        try (Connection conn = ConexaoBD.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, novoStatus);
+            stmt.setInt(2, codigo);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar status: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean excluir(int codigo) {
+        String sqlItens = "DELETE FROM itempedido WHERE pedido_id = ?";
+        String sqlPedido = "DELETE FROM pedido WHERE codigo = ?";
+
+        try (Connection conn = ConexaoBD.getConexao()) {
+            conn.setAutoCommit(false);
+            try {
+                // Deleta itens
+                try (PreparedStatement stItem = conn.prepareStatement(sqlItens)) {
+                    stItem.setInt(1, codigo);
+                    stItem.executeUpdate();
+                }
+                // Deleta pedido
+                try (PreparedStatement stPedido = conn.prepareStatement(sqlPedido)) {
+                    stPedido.setInt(1, codigo);
+                    int deletado = stPedido.executeUpdate();
+                    conn.commit();
+                    return deletado > 0;
+                }
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir pedido: " + e.getMessage());
+            return false;
+        }
     }
 }

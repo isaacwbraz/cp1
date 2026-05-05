@@ -99,4 +99,30 @@ public class EntregadorDAO {
             System.err.println("Erro ao atualizar status do entregador: " + ex.getMessage());
         }
     }
+
+    public boolean atualizar(Entregador entregador) {
+    String sql = "UPDATE entregador SET nome = ?, veiculo = ? WHERE codigo = ?";
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, entregador.getNome());
+        stmt.setString(2, entregador.getVeiculo());
+        stmt.setInt(3, entregador.getCodigo());
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao atualizar entregador: " + e.getMessage());
+        return false;
+    }
+  }
+
+public boolean excluir(int codigo) {
+    String sql = "DELETE FROM entregador WHERE codigo = ?";
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, codigo);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao excluir entregador: " + e.getMessage());
+        return false;
+    }
+  }
 }
