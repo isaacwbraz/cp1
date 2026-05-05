@@ -6,6 +6,12 @@ import src.dao.EntregadorDAO;
 import src.dao.PedidoDAO;
 import src.dao.ProdutoDAO;
 import src.dao.RestauranteDAO;
+import src.model.Cliente;
+import src.model.Entregador;
+import src.model.Pedido;
+import src.model.Produto;
+import src.model.Restaurante;
+import src.model.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

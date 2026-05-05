@@ -11,39 +11,43 @@
 
 # 🎯 Objetivo do Sistema
 
-O sistema de delivery desenvolvido em Java tem como finalidade gerenciar de forma prática e organizada os principais elementos de um serviço de entregas. Ele permite cadastrar e listar restaurantes, produtos, clientes, entregadores e pedidos, criando um fluxo completo que simula o funcionamento de uma plataforma de delivery. Através do uso de Herança e Polimorfismo, o sistema otimiza o gerenciamento de diferentes perfis de usuários em uma estrutura unificada.
+O sistema de delivery desenvolvido em Java gerencia de forma prática e organizada os principais elementos de um serviço de entregas. Originalmente focado em lógica de memória, a versão atual integra persistência completa em um banco de dados relacional PostgreSQL, permitindo que todas as informações de restaurantes, produtos, clientes, entregadores e pedidos sejam mantidas de forma permanente.
 
-Na parte operacional, o sistema possibilita que restaurantes registrem seus dados e produtos, enquanto clientes podem ser cadastrados com informações pessoais e de contato. Os pedidos são formados a partir da associação entre cliente, restaurante e produto, e recebem a atribuição de um entregador disponível. A classe Pedido conta com Sobrecarga de Métodos, permitindo adicionar itens de diferentes maneiras, garantindo que o ciclo de delivery seja representado de ponta a ponta.
-
-Além disso, o sistema foi estruturado para ser expansível e servir como base para integração com um banco de dados relacional. A aplicação utiliza um ArrayList Polimórfico para manipular Restaurantes, Clientes e Entregadores sob uma mesma base, aplicando conceitos avançados de programação orientada a objetos e modelagem de dados que refletem a lógica de um sistema real.
-
+O projeto aplica conceitos avançados de Programação Orientada a Objetos (POO), como Herança, Polimorfismo e Encapsulamento, agora reforçados pelo padrão de arquitetura DAO (Data Access Object). A estrutura foi reorganizada em pacotes profissionais para atender aos critérios de modularidade e clareza exigidos em ambientes de desenvolvimento real.
 ## 📦 Funcionalidades Principais
 
-1. Cadastro e listagem de restaurantes (com Sobrescrita de métodos)
-2. Cadastro e listagem de produtos
-3. Cadastro e listagem de clientes
-4. Cadastro e listagem de entregadores (com filtro de disponibilidade)
-5. Cadastro e listagem de pedidos (com Sobrecarga de métodos)
-6. Menu interativo com busca polimórfica
+1. CRUD Completo: Cadastro, listagem, atualização e exclusão para todas as entidades (Restaurantes, Produtos, Clientes e Entregadores).
+2. Persistência de Dados: Integração total com PostgreSQL via JDBC.
+3. Gerenciamento de Pedidos: Cadastro e listagem de pedidos com controle de status e atribuição de entregadores.
+4. Integridade Referencial: Tratamento de restrições de chaves estrangeiras para impedir exclusões acidentais de dados vinculados.
+5. Organização em Pacotes: Separação clara entre modelos (domínio), persistência (DAO) e ponto de entrada da aplicação.
+6. Menu Interativo: Console otimizado com tratamento de limpeza de buffer para entrada de dados.
 
 ## 🏗️ Estrutura de Classes 
 
-- **Classe Base:** Usuario - Superclasse que centraliza os dados comuns, permitindo a aplicação de Herança para evitar repetição de código entre as entidades do sistema.
+📂 Pacote model
+- **Classe Base**: Usuario - Superclasse que centraliza dados comuns entre Clientes e Entregadores.
 
-- **Classe 1:** Restaurante - Responsável por armazenar informações de um restaurante, como código, nome, endereço, CNPJ, telefone e categoria culinária. Serve como entidade principal para vincular produtos e pedidos.
+- **Classe 1**: Restaurante - Entidade com atributos de identificação e categoria culinária.
 
-- **Classe 2:** Produto - Representa os itens oferecidos pelos restaurantes. Contém dados como código, nome, descrição, preço e categoria, além da associação ao restaurante que o fornece.
+- **Classe 2**: Produto - Itens vinculados obrigatoriamente a um restaurante.
 
-- **Classe 3:** Cliente - Estende a classe Usuario. Guarda os dados dos usuários que fazem pedidos, incluindo e-mail e endereço. É a entidade que inicia o processo de compra.
+- **Classe 3**: Cliente - Extensão de Usuario para gestão de consumidores.
 
-- **Classe 4:** Entregador - Estende a classe Usuario. Modela os entregadores do sistema, com atributos como veículo e status de disponibilidade.
+- **Classe 4**: Entregador - Extensão de Usuario com controle de veículo e status.
 
-- **Classe 5:** ItemPedido - Representa cada produto dentro de um pedido, incluindo quantidade e valor. É usado para detalhar os itens escolhidos pelo cliente em uma compra.
+- **Classe 5**: ItemPedido - Detalhamento de produtos dentro de uma transação.
 
-- **Classe 6:** Pedido - Centraliza o processo de compra, relacionando cliente, restaurante, produtos e entregador. Implementa a Sobrecarga de Métodos para facilitar a inserção de itens no carrinho.
+- **Classe 6**: Pedido - Entidade central que relaciona todas as partes do sistema.
 
-- Classe 7:** SistemaMain - Classe principal que contém o menu interativo e utiliza um ArrayList polimórfico para gerenciar todas as instâncias de usuários. É responsável por controlar a execução do sistema.
+📂 Pacote dao
+- **ConexaoBD**: Gerencia a conexão JDBC com o banco de dados PostgreSQL.
+
+- **DAOs Específicos**: (ClienteDAO, ProdutoDAO, etc.) - Classes que contêm toda a lógica de SQL para inserção, busca, edição e deleção no banco de dados.
+
+📂 Raiz
+- **SistemaMain**: Classe principal responsável pelo menu e orquestração do fluxo de execução do sistema.
 
 ## 🔄 Regra de Negócio Complexa
 
-"Atribuição automática de entregador disponível através de busca polimórfica na lista de usuários + aplicação de taxa de entrega variável e descontos progressivos."
+"Atribuição automática de entregador disponível através de busca polimórfica com persistência em banco de dados + controle de integridade referencial para proteção de dados vinculados entre Restaurantes e Produtos."

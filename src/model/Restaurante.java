@@ -1,4 +1,4 @@
-package src;
+package src.model;
 public class Restaurante extends Usuario {
     private static final double TAXA_ENTREGA = 8.0;
     private int id;

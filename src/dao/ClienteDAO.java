@@ -1,9 +1,10 @@
 package src.dao;
 
-import src.Cliente;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.model.Cliente;
 
 public class ClienteDAO {
  

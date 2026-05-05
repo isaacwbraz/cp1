@@ -1,4 +1,4 @@
-package src;
+package src.model;
 public class Entregador extends Usuario {
 
     private String veiculo;

@@ -1,13 +1,14 @@
 package src.dao;
 
-import src.Cliente;
-import src.Entregador;
-import src.Pedido;
-import src.Restaurante;
-import src.itemPedido;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.model.Cliente;
+import src.model.Entregador;
+import src.model.Pedido;
+import src.model.Restaurante;
+import src.model.itemPedido;
 
 public class PedidoDAO {
 

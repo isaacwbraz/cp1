@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import src.Entregador;
+
 import src.dao.ConexaoBD;
+import src.model.Entregador;
 
 public class EntregadorDAO {
 

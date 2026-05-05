@@ -1,9 +1,10 @@
 package src.dao;
 
-import src.Restaurante;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.model.Restaurante;
 
 public class RestauranteDAO {
 

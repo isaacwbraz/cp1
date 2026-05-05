@@ -1,4 +1,4 @@
-package src;
+package src.model;
 public abstract class Usuario {
     
     protected int id;
