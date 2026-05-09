@@ -1,5 +1,5 @@
 package src.model;
-public class Cliente extends Usuario {
+public class Cliente extends Usuario implements Autenticavel {
 
     private String email;
 
@@ -34,5 +34,15 @@ public class Cliente extends Usuario {
     @Override
     public String toString() {
         return "Cliente: " + nome + " (" + email + ")";
+    }
+
+    @Override
+    public void registrarLog(String acao) {
+        System.out.println("Log do Cliente: " + acao);
+    }
+
+    @Override
+    public boolean validarAcesso(String credencial) {
+        return this.getCpf().equals(credencial);
     }
 }

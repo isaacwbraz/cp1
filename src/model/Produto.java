@@ -1,7 +1,7 @@
 package src.model;
-public class Produto {
+public class Produto{
     
-    private int id;;
+    private int id;
 
     private int codigo;
     private String nome;

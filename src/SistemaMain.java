@@ -157,17 +157,21 @@ public class SistemaMain {
     int codigo = scanner.nextInt(); 
     scanner.nextLine();
 
-    System.out.print("⚠ ATENÇÃO: Isso pode falhar se houver produtos vinculados. Confirma? (S/N): ");
-    String confirma = scanner.nextLine();
+    Restaurante r = restauranteDAO.buscarPorId(codigo); 
 
-    if (confirma.equalsIgnoreCase("S")) {
-        if (restauranteDAO.excluir(codigo)) {
-            System.out.println("✅ Restaurante removido com sucesso!");
+    if (r != null) {
+        System.out.print("Digite o CNPJ do restaurante para confirmar a exclusão: ");
+        String cnpjConfirma = scanner.nextLine();
+
+        if (r.validarAcesso(cnpjConfirma)) {
+            if (restauranteDAO.excluir(codigo)) {
+                System.out.println("✅ Restaurante removido com sucesso!");
+            }
         } else {
-            System.out.println("❌ Erro ao excluir. Motivo: Integridade referencial (Ex: existem produtos neste restaurante).");
+            System.out.println("❌ Erro: CNPJ não confere. Acesso Negado!");
         }
     }
-  }
+}
 
     // ===== PRODUTO =====
     private static void cadastrarProduto() {
@@ -332,15 +336,24 @@ public class SistemaMain {
 }
 
     private static void excluirCliente() {
-        System.out.print("\nCódigo do cliente para excluir: ");
-        int codigo = scanner.nextInt(); scanner.nextLine();
-        
-        System.out.print("⚠ Confirmar exclusão? (S/N): ");
-        if (scanner.nextLine().equalsIgnoreCase("S")) {
+    System.out.print("\nCódigo do cliente para excluir: ");
+    int codigo = scanner.nextInt(); 
+    scanner.nextLine();
+
+    Cliente c = clienteDAO.buscarPorId(codigo);
+
+    if (c != null) {
+        System.out.print("⚠ Para confirmar a exclusão da sua conta, digite seu CPF: ");
+        String cpfConfirma = scanner.nextLine();
+
+        if (c.validarAcesso(cpfConfirma)) { //
             clienteDAO.excluir(codigo);
-            System.out.println("✅ Operação realizada.");
+            System.out.println("✅ Sua conta foi removida com sucesso.");
+        } else {
+            System.out.println("❌ Acesso negado! Você só pode deletar sua própria conta.");
         }
     }
+}
     
 
     // ===== ENTREGADOR =====
@@ -415,14 +428,18 @@ private static void excluirEntregador() {
     int codigo = scanner.nextInt(); 
     scanner.nextLine();
 
-    System.out.print("⚠ Tem certeza? (S/N): ");
-    String confirma = scanner.nextLine();
+    Entregador e = entregadorDAO.buscarPorId(codigo);
 
-    if (confirma.equalsIgnoreCase("S")) {
-        if (entregadorDAO.excluir(codigo)) {
-            System.out.println("✅ Entregador removido com sucesso!");
+    if (e != null) {
+        System.out.print("⚠ Confirme o CPF do entregador para autorizar a remoção: ");
+        String cpfConfirma = scanner.nextLine();
+
+        if (e.validarAcesso(cpfConfirma)) { //
+            if (entregadorDAO.excluir(codigo)) {
+                System.out.println("✅ Entregador removido.");
+            }
         } else {
-            System.out.println("❌ Erro: Verifique se ele está vinculado a um pedido.");
+            System.out.println("❌ Erro: Credencial inválida. Ação bloqueada.");
         }
     }
 }
@@ -467,7 +484,11 @@ private static void excluirEntregador() {
     pedido.adicionarItem(produto, qtd);
 
     if (ent != null) {
-        pedido.atribuirEntregador(ent);
+        if (pedido.atribuirEntregador(ent)) {
+        System.out.println("✅ Entregador " + ent.getNome() + " atribuído com sucesso!");
+        } else {
+        System.out.println("⚠ O entregador selecionado não estava disponível.");
+        }
     }
 
     if (pedidoDAO.inserir(pedido)) {
@@ -476,19 +497,22 @@ private static void excluirEntregador() {
 }
 
 private static void listarPedidos() {
-    System.out.println("\n--- LISTA DE PEDIDOS (BANCO DE DADOS) ---");
-    
-    PedidoDAO pedidoDAO = new PedidoDAO();
+    System.out.println("\n--- LISTA DE PEDIDOS (RESUMO DETALHADO) ---");
     List<Pedido> listaDoBanco = pedidoDAO.listarTodos();
 
     if (listaDoBanco.isEmpty()) {
-        System.out.println("Nenhum pedido encontrado no banco de dados.");
+        System.out.println("Nenhum pedido encontrado.");
     } else {
         for (Pedido p : listaDoBanco) {
-            System.out.println(p);
+            double totalComRegras = p.calcularPrecoFinal(); 
+
+            System.out.println("Pedido ID: " + p.getId());
+            System.out.println("Cliente: " + p.getCliente().getNome());
+            System.out.printf("Valor Final (com Descontos e Taxa R$ 8): R$ %.2f\n", totalComRegras);
+            System.out.println("-----------------------------------------------");
         }
     }
- }
+}
 
  private static void atualizarStatusPedido() {
         System.out.print("Código do Pedido: ");

@@ -2,7 +2,7 @@ package src.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pedido {
+public class Pedido implements Calculavel {
 
     private int codigo; 
     private String status;
@@ -102,4 +102,26 @@ public class Pedido {
                " | Total: R$" + String.format("%.2f", calcularTotal()) +
                (entregador != null ? " | Entregador: " + entregador.getNome() : " | Sem entregador");
     }
+
+    @Override
+public double calcularPrecoFinal() {
+    double subtotal = 0;
+
+    for (itemPedido item : itens) {
+        subtotal += item.getProduto().getPreco() * item.getQuantidade();
+    }
+
+    double desconto = 0;
+    if (subtotal > 300.00) {
+        desconto = subtotal * 0.15; 
+    } else if (subtotal > 200.00) {
+        desconto = subtotal * 0.10; 
+    } else if (subtotal > 100.00) {
+        desconto = subtotal * 0.05; 
+    }
+
+    double taxaEntrega = 8.00;
+
+    return (subtotal - desconto) + taxaEntrega;
+}
 }

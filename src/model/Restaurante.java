@@ -1,5 +1,5 @@
 package src.model;
-public class Restaurante extends Usuario {
+public class Restaurante extends Usuario implements Autenticavel {
     private static final double TAXA_ENTREGA = 8.0;
     private int id;
     private String cnpj;
@@ -54,5 +54,15 @@ public class Restaurante extends Usuario {
 
     public double getTaxaEntrega() {
         return TAXA_ENTREGA;
+    }
+
+        @Override
+    public void registrarLog(String acao) {
+        System.out.println("Log do Restaurante: " + acao);
+    }
+
+    @Override
+    public boolean validarAcesso(String credencial) {
+        return this.getCnpj().equals(credencial);
     }
 }
