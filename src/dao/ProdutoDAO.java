@@ -118,4 +118,27 @@ public boolean excluir(int codigo) {
         return false;
     }
   }
+
+  public Produto buscarPorId(int id) {
+    Produto p = null;
+    String sql = "SELECT * FROM produto WHERE codigo = ?";
+
+    try (Connection conn = ConexaoBD.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                p = new Produto(
+                    rs.getInt("codigo"),
+                    rs.getString("nome"),
+                    rs.getDouble("preco")
+                );
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("Erro ao buscar produto por ID: " + e.getMessage());
+    }
+    return p;
+}
 }

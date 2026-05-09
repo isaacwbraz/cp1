@@ -105,25 +105,32 @@ public class PedidoDAO {
         return pedidos;
     }
 
-    public List<itemPedido> buscarItensDoPedido(int pedidoId, Connection conn) {
-        List<itemPedido> itens = new ArrayList<>();
-        String sql = "SELECT * FROM itempedido WHERE pedido_id = ?";
+public List<itemPedido> buscarItensDoPedido(int pedidoId, Connection conn) {
+    List<itemPedido> itens = new ArrayList<>();
+    String sql = "SELECT * FROM itempedido WHERE pedido_id = ?";
+    
+    ProdutoDAO produtoDAO = new ProdutoDAO();
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, pedidoId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    itemPedido item = new itemPedido();
-                    item.setCodigo(rs.getInt("codigo"));
-                    item.setQuantidade(rs.getInt("quantidade"));
-                    item.setPrecoUnitario(rs.getDouble("preco_unitario"));
-                    itens.add(item);
-                }
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, pedidoId);
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                itemPedido item = new itemPedido();
+                item.setCodigo(rs.getInt("codigo"));
+                item.setQuantidade(rs.getInt("quantidade"));
+                item.setPrecoUnitario(rs.getDouble("preco_unitario"));
+                
+                int produtoId = rs.getInt("produto_id");
+                item.setProduto(produtoDAO.buscarPorId(produtoId)); 
+                // ----------------------------
+
+                itens.add(item);
             }
-        } catch (SQLException e) {
-            System.err.println("Erro ao carregar itens do pedido " + pedidoId + ": " + e.getMessage());
         }
-        return itens;
+    } catch (SQLException e) {
+        System.err.println("Erro ao carregar itens do pedido " + pedidoId + ": " + e.getMessage());
+    }
+    return itens;
     }
 
     public boolean atualizarStatus(int codigo, String novoStatus) {
