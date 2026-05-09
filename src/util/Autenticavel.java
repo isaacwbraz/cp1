@@ -1,6 +1,6 @@
-package src.model;
+package src.util;
 
-interface Autenticavel {
+public interface Autenticavel {
     void registrarLog(String acao);
     boolean validarAcesso(String credencial);
 }

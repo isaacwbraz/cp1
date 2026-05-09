@@ -1,4 +1,7 @@
 package src.model;
+
+import src.util.Autenticavel;
+
 public class Entregador extends Usuario implements Autenticavel {
 
     private String veiculo;

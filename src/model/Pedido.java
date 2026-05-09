@@ -2,6 +2,8 @@ package src.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import src.util.Calculavel;
+
 public class Pedido implements Calculavel {
 
     private int codigo; 

@@ -1,4 +1,7 @@
 package src.model;
+
+import src.util.Autenticavel;
+
 public class Restaurante extends Usuario implements Autenticavel {
     private static final double TAXA_ENTREGA = 8.0;
     private int id;
