@@ -87,7 +87,9 @@ public class PedidoDAO {
                 Pedido p = new Pedido(rest, cli); 
                 p.setCodigo(rs.getInt("codigo"));
                 p.setStatus(rs.getString("status"));
-            
+                
+
+                //null = 0
                 int entregadorId = rs.getInt("entregador_id");
                 if (!rs.wasNull()) {
                     Entregador ent = entregadorDAO.buscarPorId(entregadorId);
@@ -121,8 +123,8 @@ public List<itemPedido> buscarItensDoPedido(int pedidoId, Connection conn) {
                 item.setPrecoUnitario(rs.getDouble("preco_unitario"));
                 
                 int produtoId = rs.getInt("produto_id");
+                //busca o produto completo para associar ao item
                 item.setProduto(produtoDAO.buscarPorId(produtoId)); 
-                // ----------------------------
 
                 itens.add(item);
             }
@@ -153,12 +155,10 @@ public List<itemPedido> buscarItensDoPedido(int pedidoId, Connection conn) {
         try (Connection conn = ConexaoBD.getConexao()) {
             conn.setAutoCommit(false);
             try {
-                // Deleta itens
                 try (PreparedStatement stItem = conn.prepareStatement(sqlItens)) {
                     stItem.setInt(1, codigo);
                     stItem.executeUpdate();
                 }
-                // Deleta pedido
                 try (PreparedStatement stPedido = conn.prepareStatement(sqlPedido)) {
                     stPedido.setInt(1, codigo);
                     int deletado = stPedido.executeUpdate();

@@ -105,8 +105,9 @@ public class Pedido implements Calculavel {
                (entregador != null ? " | Entregador: " + entregador.getNome() : " | Sem entregador");
     }
 
+    // Método para calcular o preço final do pedido, considerando descontos e taxa de entrega -> interface Calculavel
     @Override
-public double calcularPrecoFinal() {
+    public double calcularPrecoFinal() {
     double subtotal = 0;
 
     for (itemPedido item : itens) {
@@ -125,5 +126,5 @@ public double calcularPrecoFinal() {
     double taxaEntrega = 8.00;
 
     return (subtotal - desconto) + taxaEntrega;
-}
+ }
 }

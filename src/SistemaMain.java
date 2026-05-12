@@ -335,7 +335,7 @@ public class SistemaMain {
     }
 }
 
-    private static void excluirCliente() {
+   private static void excluirCliente() {
     System.out.print("\nCódigo do cliente para excluir: ");
     int codigo = scanner.nextInt(); 
     scanner.nextLine();
@@ -346,14 +346,21 @@ public class SistemaMain {
         System.out.print("⚠ Para confirmar a exclusão da sua conta, digite seu CPF: ");
         String cpfConfirma = scanner.nextLine();
 
-        if (c.validarAcesso(cpfConfirma)) { //
-            clienteDAO.excluir(codigo);
-            System.out.println("✅ Sua conta foi removida com sucesso.");
+        if (c.validarAcesso(cpfConfirma)) { 
+            boolean sucesso = clienteDAO.excluir(codigo);
+
+            if (sucesso) {
+                System.out.println("✅ Sua conta foi removida com sucesso.");
+            } else {
+                System.out.println("❌ Não foi possível excluir: existem pedidos vinculados a esta conta.");
+            }
         } else {
             System.out.println("❌ Acesso negado! Você só pode deletar sua própria conta.");
         }
+    } else {
+        System.out.println("❌ Cliente não encontrado!");
     }
-}
+  }
     
 
     // ===== ENTREGADOR =====
