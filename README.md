@@ -47,4 +47,4 @@ O projeto utiliza conceitos de **Programação Orientada a Objetos (POO)**, como
 
 ## Link do Vídeo Demonstrativo do Sistema
 
-**youtube.com/watch?v=jaEdgAxV16g&feature=youtu.be**
+**youtube.com/watch?v=jaEdgAxV16g&feature=youtu.be**.
