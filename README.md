@@ -44,3 +44,7 @@ O projeto utiliza conceitos de **Programação Orientada a Objetos (POO)**, como
 ## 🔄 Regra de Negócio Complexa
 
 "Cálculo automatizado de descontos progressivos (5%, 10% e 15%) e taxas fixas via interface **Calculavel**, somado à validação de identidade via interface **Autenticavel** para proteção contra exclusões indevidas de contas e registros no banco de dados."
+
+## Link do Vídeo Demonstrativo do Sistema
+
+**youtube.com/watch?v=jaEdgAxV16g&feature=youtu.be**

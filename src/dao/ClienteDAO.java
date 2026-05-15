@@ -28,13 +28,13 @@ public class ClienteDAO {
                         cliente.setId(rs.getInt(1));
                     }
                 }
-                System.out.println("✅ Cliente salvo no banco! ID: " + cliente.getId());
+                System.out.println("Cliente salvo no banco! ID: " + cliente.getId());
                 return true;
             }
             return false;
  
         } catch (SQLException e) {
-            System.err.println("❌ Erro ao conectar ou inserir: " + e.getMessage());
+            System.err.println("Erro ao conectar ou inserir: " + e.getMessage());
             return false;
         }
     }

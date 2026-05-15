@@ -146,9 +146,9 @@ public class SistemaMain {
     Restaurante r = new Restaurante(codigo, nome, endereco, cnpj, telefone, categoria);
 
     if (restauranteDAO.atualizar(r)) {
-        System.out.println("✅ Restaurante atualizado no banco com sucesso!");
+        System.out.println("Restaurante atualizado no banco com sucesso!");
     } else {
-        System.out.println("❌ Erro ao atualizar. Verifique se o código existe.");
+        System.out.println("Erro ao atualizar. Verifique se o código existe.");
     }
 }
 
@@ -165,10 +165,10 @@ public class SistemaMain {
 
         if (r.validarAcesso(cnpjConfirma)) {
             if (restauranteDAO.excluir(codigo)) {
-                System.out.println("✅ Restaurante removido com sucesso!");
+                System.out.println("Restaurante removido com sucesso!");
             }
         } else {
-            System.out.println("❌ Erro: CNPJ não confere. Acesso Negado!");
+            System.out.println("Erro: CNPJ não confere. Acesso Negado!");
         }
     }
 }
@@ -251,9 +251,9 @@ public class SistemaMain {
     Produto p = new Produto(codigo, nome, descricao, preco, categoria, rest);
 
     if (produtoDAO.atualizar(p)) {
-        System.out.println("✅ Produto atualizado com sucesso!");
+        System.out.println("Produto atualizado com sucesso!");
     } else {
-        System.out.println("❌ Erro ao atualizar produto.");
+        System.out.println("Erro ao atualizar produto.");
     }
   }
 
@@ -262,12 +262,12 @@ public class SistemaMain {
     int codigo = scanner.nextInt(); 
     scanner.nextLine(); 
 
-    System.out.print("⚠ Tem certeza que deseja remover este produto? (S/N): ");
+    System.out.print("Tem certeza que deseja remover este produto? (S/N): ");
     if (scanner.nextLine().equalsIgnoreCase("S")) {
         if (produtoDAO.excluir(codigo)) {
-            System.out.println("✅ Produto removido do banco!");
+            System.out.println("Produto removido do banco!");
         } else {
-            System.out.println("❌ Erro ao excluir. Ele pode estar em um pedido ativo.");
+            System.out.println("Erro ao excluir. Ele pode estar em um pedido ativo.");
         }
      }
     }
@@ -329,9 +329,9 @@ public class SistemaMain {
     Cliente c = new Cliente(codigo, nome, cpf, telefone, email, endereco);
 
     if (clienteDAO.atualizar(c)) {
-        System.out.println("✅ Cliente atualizado no banco com sucesso!");
+        System.out.println("Cliente atualizado no banco com sucesso!");
     } else {
-        System.out.println("❌ Erro ao atualizar cliente. Verifique o código.");
+        System.out.println("Erro ao atualizar cliente. Verifique o código.");
     }
 }
 
@@ -343,22 +343,22 @@ public class SistemaMain {
     Cliente c = clienteDAO.buscarPorId(codigo);
 
     if (c != null) {
-        System.out.print("⚠ Para confirmar a exclusão da sua conta, digite seu CPF: ");
+        System.out.print("Para confirmar a exclusão da sua conta, digite seu CPF: ");
         String cpfConfirma = scanner.nextLine();
 
         if (c.validarAcesso(cpfConfirma)) { 
             boolean sucesso = clienteDAO.excluir(codigo);
 
             if (sucesso) {
-                System.out.println("✅ Sua conta foi removida com sucesso.");
+                System.out.println("Sua conta foi removida com sucesso.");
             } else {
-                System.out.println("❌ Não foi possível excluir: existem pedidos vinculados a esta conta.");
+                System.out.println("Não foi possível excluir: existem pedidos vinculados a esta conta.");
             }
         } else {
-            System.out.println("❌ Acesso negado! Você só pode deletar sua própria conta.");
+            System.out.println("Acesso negado! Você só pode deletar sua própria conta.");
         }
     } else {
-        System.out.println("❌ Cliente não encontrado!");
+        System.out.println("Cliente não encontrado!");
     }
   }
     
@@ -424,9 +424,9 @@ public class SistemaMain {
     Entregador e = new Entregador(codigo, nome, cpf, telefone, veiculo, status);
 
     if (entregadorDAO.atualizar(e)) {
-        System.out.println("✅ Entregador atualizado no banco!");
+        System.out.println("Entregador atualizado no banco!");
     } else {
-        System.out.println("❌ Erro ao atualizar entregador.");
+        System.out.println("Erro ao atualizar entregador.");
     }
 }
 
@@ -438,15 +438,15 @@ private static void excluirEntregador() {
     Entregador e = entregadorDAO.buscarPorId(codigo);
 
     if (e != null) {
-        System.out.print("⚠ Confirme o CPF do entregador para autorizar a remoção: ");
+        System.out.print("Confirme o CPF do entregador para autorizar a remoção: ");
         String cpfConfirma = scanner.nextLine();
 
         if (e.validarAcesso(cpfConfirma)) { //
             if (entregadorDAO.excluir(codigo)) {
-                System.out.println("✅ Entregador removido.");
+                System.out.println("Entregador removido.");
             }
         } else {
-            System.out.println("❌ Erro: Credencial inválida. Ação bloqueada.");
+            System.out.println("Erro: Credencial inválida. Ação bloqueada.");
         }
     }
 }
@@ -492,9 +492,9 @@ private static void excluirEntregador() {
 
     if (ent != null) {
         if (pedido.atribuirEntregador(ent)) {
-        System.out.println("✅ Entregador " + ent.getNome() + " atribuído com sucesso!");
+        System.out.println("Entregador " + ent.getNome() + " atribuído com sucesso!");
         } else {
-        System.out.println("⚠ O entregador selecionado não estava disponível.");
+        System.out.println("O entregador selecionado não estava disponível.");
         }
     }
 
@@ -528,17 +528,17 @@ private static void listarPedidos() {
         String status = scanner.nextLine();
         
         if (pedidoDAO.atualizarStatus(cod, status)) {
-            System.out.println("✅ Status atualizado!");
+            System.out.println("Status atualizado!");
         }
     }
 
     private static void excluirPedido() {
         System.out.print("Código do Pedido para DELETAR: ");
         int cod = scanner.nextInt(); scanner.nextLine();
-        System.out.print("⚠ Isso apagará os itens do pedido. Confirma? (S/N): ");
+        System.out.print("Isso apagará os itens do pedido. Confirma? (S/N): ");
         if (scanner.nextLine().equalsIgnoreCase("S")) {
             pedidoDAO.excluir(cod);
-            System.out.println("✅ Pedido excluído.");
+            System.out.println("Pedido excluído.");
         }
     }
 }

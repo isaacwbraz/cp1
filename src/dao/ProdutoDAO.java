@@ -59,7 +59,7 @@ public class ProdutoDAO {
                 rs.getString("descricao"),
                 rs.getDouble("preco"),
                 rs.getString("categoria"),
-                rest // Agora 'rest' não é mais null!
+                rest
             );
             produtos.add(p);
         }
